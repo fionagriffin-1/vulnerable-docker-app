@@ -32,5 +32,11 @@ jobs:
       - name: Scan Docker image with TMAS
         env:
           TMAS_API_KEY: ${{ secrets.TREND_KEY }}
-        run: ./tmas scan docker-archive:vulnerable-app.tar -VS
+        run: ./tmas scan docker-archive:vulnerable-app.tar -VMS | tee scan-results.txt
+
+      - name: Upload scan results
+        uses: actions/upload-artifact@v3
+        with:
+          name: tmas-scan-results
+          path: scan-results.txt
 
