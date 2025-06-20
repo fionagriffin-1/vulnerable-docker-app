@@ -32,5 +32,5 @@ jobs:
       - name: Scan Docker image with TMAS
         env:
           TMAS_API_KEY: ${{ secrets.TREND_KEY }}
-        run: ./tmas scan --input vulnerable-app.tar -VS
+        run: ./tmas scan docker-archive:vulnerable-app.tar -VS
 
