@@ -1,20 +1,28 @@
-name: TMAS Scan
+name: TMAS Docker Image Scan
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  scan:
+  tmas-docker-scan:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          path: code
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t vulnerable-app:latest .
+
+      - name: Save Docker image to tar file
+        run: |
+          docker save -o vulnerable-app.tar vulnerable-app:latest
 
       - name: Download TMAS CLI
         run: |
@@ -22,8 +30,9 @@ jobs:
           chmod +x ./tmas
           ./tmas version
 
-      - name: Run TMAS scan
+      - name: Scan Docker image with TMAS
         env:
           TMAS_API_KEY: ${{ secrets.TREND_KEY }}
-        run: ./tmas scan dir:code -VS
+        run: |
+          ./tmas scan image-archive:vulnerable-app.tar -VS
 
