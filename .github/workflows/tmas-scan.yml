@@ -1,6 +1,4 @@
 name: TMAS Docker Image Scan
-name: TMAS Docker Image Scan
-name: TMAS Docker Image Scan
 
 on:
   push:
