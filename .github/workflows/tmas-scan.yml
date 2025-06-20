@@ -1,4 +1,5 @@
 name: TMAS Docker Image Scan
+name: TMAS Docker Image Scan
 
 on:
   push:
@@ -13,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
@@ -34,5 +35,5 @@ jobs:
         env:
           TMAS_API_KEY: ${{ secrets.TREND_KEY }}
         run: |
-          ./tmas scan image-archive:vulnerable-app.tar -VS
+          ./tmas scan --input vulnerable-app.tar -VS
 
